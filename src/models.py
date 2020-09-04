@@ -1,6 +1,5 @@
+from datetime import datetime
 import flask_sqlalchemy
-from dataclasses import dataclass
-from typing import List
 
 db = flask_sqlalchemy.SQLAlchemy()
 
@@ -25,7 +24,6 @@ class LineItem(db.Model):
             "parent_id": self.parent_id,
             "quantity": self.quantity
         }
-
 
 class Address(db.Model):
     """Model for Address."""
@@ -62,7 +60,6 @@ class Address(db.Model):
             "phone": self.phone
         }
 
-
 class Event(db.Model):
     """Model for Events."""
 
@@ -72,7 +69,8 @@ class Event(db.Model):
                          primary_key=True)
     event_type = db.Column(db.String)
     event_version = db.Column(db.String)
-    lovevery_user_id = db.Column(db.String)
+    ingestion_datetime_UTC = db.Column(db.DateTime, default=datetime.utcnow)
+    lovevery_user_id = db.Column(db.String, unique=True)
     email = db.Column(db.String)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
@@ -80,6 +78,7 @@ class Event(db.Model):
     shipping_address = db.relationship("Address", uselist=False)
     currency = db.Column(db.String)
     financial_status = db.Column(db.String)
+    order_value = db.Column(db.Float)
     total_discounts = db.Column(db.Float)
     total_tax = db.Column(db.Float)
     discount_codes = db.Column(db.String)
@@ -94,6 +93,7 @@ class Event(db.Model):
             "event_id": self.event_id,
             "event_type": self.event_type,
             "event_version": self.event_version,
+            "ingestion_datetime_UTC": self.ingestion_datetime_UTC,
             "lovevery_user_id": self.lovevery_user_id,
             "email": self.email,
             "first_name": self.first_name,
@@ -102,6 +102,7 @@ class Event(db.Model):
             "shipping_address": self.shipping_address.as_dict(),
             "currency": self.currency,
             "financial_status": self.financial_status,
+            "order_value": self.order_value,
             "total_discounts": self.total_discounts,
             "total_tax": self.total_tax,
             "buyer_accepts_marketing": self.buyer_accepts_marketing,
