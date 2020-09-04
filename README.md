@@ -20,6 +20,7 @@ SQLAlchemy is the industry standard for interacting with a PostgreSQL database i
 1. The sample data given is actually not valid JSON (The nested fields are strings with multiple sets of nested double quotes). I edited the sample data to be valid json with the assumption that I would rather alter the producer to send valid json, rather than push those transformations onto every consumer.
 2. I made an assumption that `order_value` would be available on each event, since it was not made available. 
 3. I assumed that the timestamp of an event being sent to the consumer would be the timestamp used for analytical queries, since one was not made available.
+4. The original ask was to be able to ingest a CSV file or S3 bucket of events, but seeing as the introduction mentioned Kafka, I assumed that I could attach the producer to this consumer, rather than just handle bulk loading from files.
 
 ## Test Data.
 There is test data at the location `src/test/data/test_data.json`. I used this data when testing my API. Feel free to use it if you'd like to try out making requests to the system. 
